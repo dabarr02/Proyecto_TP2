@@ -5,12 +5,12 @@ import java.util.*;
 import org.json.JSONObject;
 
 public class Junction extends SimulatedObject {
-	private List<Road> carreteras_in;
-	private Map<Juction,Road>carreteras_out;
-	private List<List<Vehicle>> lista_colas;
-	private Map<Road,List<Vehicle>> map_road;
-	private int luz;
-	private int green_paso;
+	private List<Road> inRoads;
+	private Map<Junction,Road>outRoads;
+	private List<List<Vehicle>> queLists;
+	private Map<Road,List<Vehicle>> roadMap;
+	private int light;
+	private int greenPaso;
 	private LightSwitchingStrategy light_strat;
 	private DequeuingStrategy colaStrat;
 	private int x;
@@ -25,6 +25,24 @@ public class Junction extends SimulatedObject {
 		  }
 		}
 
+	public void addIncomingRoad(Road r) {
+		if(r == null) {
+			throw new IllegalArgumentException("No se admiten carreteras nulas.");
+		}
+		//añadimos carretera a la lista de carreteras entrantes
+		inRoads.add(r);
+		queLists.add(new ArrayList<Vehicle>());
+		roadMap.put(r, new ArrayList<Vehicle>());
+		return;
+	}
+	public void addOutgoingRoad(Road r,Junction j) {
+		if(r == null || j == null) {
+			throw new IllegalArgumentException("No se admiten carreteras o cruces nulos.");
+		}
+		//añadimos carretera a la lista de carreteras salientes
+		outRoads.put(j, r);
+		return;
+	}
 	@Override
 	void advance(int time) {
 		// TODO Auto-generated method stub

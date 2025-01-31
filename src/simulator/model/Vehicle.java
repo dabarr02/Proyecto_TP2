@@ -39,7 +39,14 @@ public class Vehicle extends SimulatedObject{
 	@Override
 	void advance(int time) {
 		// TODO Auto-generated method stub
-		
+		if(!status.equals(VehicleStatus.TRAVELING)) {
+			return;
+		}
+		this.location+=this.speed;
+		if(this.location>=this.road.getLength()) {
+			this.location=this.road.getLength();
+			
+		}
 	}
 
 	@Override
