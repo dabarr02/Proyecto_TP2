@@ -5,7 +5,7 @@ import java.util.*;
 
 import org.json.JSONObject;
 
-public class Road extends SimulatedObject {
+public abstract class Road extends SimulatedObject {
 	private Junction originJunction;
 	private int length;
 	private Junction destinationJunction;
@@ -60,5 +60,22 @@ public class Road extends SimulatedObject {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	Junction getOriginJunction() {
+		return originJunction;
+	}
+	Junction getDestinationJunction() {
+		return destinationJunction;
+	}
+	void addContamination(int c) {
+		if (c < 0) {
+			throw new IllegalArgumentException("La contaminación debe ser no negativa");
+		}
+		this.totalContamination += c;
+		
+	}
+	abstract void reduceTotalContamination();
+	abstract void updateSpeedLimit();
+	abstract int calculateVehicleSpeed(Vehicle v);
+	
 
 }

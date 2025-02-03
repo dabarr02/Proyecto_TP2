@@ -13,7 +13,8 @@ public class Vehicle extends SimulatedObject{
 	private int location;
 	private int contClass; //grado de contaminacion
 	private int totalCO2;
-	private int distancia_total;
+	private int distanciaTotal;
+	private int destJunction; //indice del siguiente cruce
 	
 	Vehicle(String id, int maxSpeed, int contClass, List<Junction> itinerary) {
 		  super(id);
@@ -33,20 +34,32 @@ public class Vehicle extends SimulatedObject{
 		  //Inicializar atributos
 		  this.maxSpeed=maxSpeed;
 		  this.contClass=contClass;
+		  this.destJunction=0;
 		  return;
 		}
 
 	@Override
 	void advance(int time) {
+		if(time<0) {
+			throw new IllegalArgumentException("El tiempo debe ser positivo.");
+		}
 		// TODO Auto-generated method stub
 		if(!status.equals(VehicleStatus.TRAVELING)) {
 			return;
 		}
-		this.location+=this.speed;
-		if(this.location>=this.road.getLength()) {
-			this.location=this.road.getLength();
-			
+		int oldLocation = this.location;
+		this.location= Math.min(this.location+this.speed, this.road.getLength());
+		this.distanciaTotal+=this.location-oldLocation;
+		int c =this.contClass*this.distanciaTotal;
+		this.totalCO2+=	c;	
+		this.road.addContamination(c);
+		if(this.location==this.road.getLength()) {
+			this.speed=0;
+			this.status=VehicleStatus.WAITING;
+			this.itinerary.get(this.destJunction).enter(this);
+			this.destJunction++;
 		}
+		return;
 	}
 
 	@Override
@@ -56,6 +69,24 @@ public class Vehicle extends SimulatedObject{
 	}
 	void moveToNextRoad() {
 		// TODO
+		if(!(this.status.equals(VehicleStatus.WAITING )|| this.status.equals(VehicleStatus.PENDING))) {
+			throw new IllegalArgumentException("El vehiculo no esta esperando.");
+		}
+		if(this.road!=null || this.destJunction>0) {
+			this.road.exit(this);
+		}else if(this.destJunction==this.itinerary.size()-1) {
+			this.status=VehicleStatus.ARRIVED;
+			this.location=0;
+			this.speed=0;
+			this.road=null;
+			return;
+		}
+			this.road=this.itinerary.get(this.destJunction).roadTo(this.itinerary.get(this.destJunction+1));
+			this.road.enter(this);
+			this.status=VehicleStatus.TRAVELING;
+			this.location=0;
+			return;
+		
 	}
 	
 	
