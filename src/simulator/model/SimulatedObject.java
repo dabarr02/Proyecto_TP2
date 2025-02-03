@@ -4,22 +4,22 @@ import org.json.JSONObject;
 
 public abstract class SimulatedObject {
 
-	protected String _id;
+	protected String id;
 
 	SimulatedObject(String id) {
 		if ( id == null || id.isBlank() )
 			throw new IllegalArgumentException("the 'id' must be a nonempty string.");
 		else
-			_id = id;
+			id = id;
 	}
 
 	public String getId() {
-		return _id;
+		return id;
 	}
 
 	@Override
 	public String toString() {
-		return _id;
+		return id;
 	}
 
 	abstract void advance(int time);

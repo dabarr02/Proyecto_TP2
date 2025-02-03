@@ -64,7 +64,35 @@ public class Vehicle extends SimulatedObject{
 
 	@Override
 	public JSONObject report() {
-		// TODO Auto-generated method stub
+		System.out.println("=============================");
+		System.out.println("Creating a JSONObject Example");
+		System.out.println("=============================");
+		System.out.println();
+
+		// we create a JSONObject
+		JSONObject jo1 = new JSONObject();
+
+		// we put some keys with simple values into 'jo1'
+		jo1.put("id", this.id);
+		jo1.put("speed", this.speed);
+		jo1.put("distance", this.distanciaTotal);
+		jo1.put("co2", this.totalCO2);
+		jo1.put("class", this.contClass);
+		jo1.put("status", this.status);
+		jo1.put("road", this.road);
+		jo1.put("location", this.location);
+
+
+		
+		// print it
+		System.out.println(jo1);
+		System.out.println();
+
+		// print nicely
+		System.out.println(jo1.toString(2));
+		System.out.println();
+		
+
 		return null;
 	}
 	void moveToNextRoad() {
@@ -82,9 +110,11 @@ public class Vehicle extends SimulatedObject{
 			return;
 		}
 			this.road=this.itinerary.get(this.destJunction).roadTo(this.itinerary.get(this.destJunction+1));
+			this.location=0;
+			this.speed=0;
 			this.road.enter(this);
 			this.status=VehicleStatus.TRAVELING;
-			this.location=0;
+			
 			return;
 		
 	}

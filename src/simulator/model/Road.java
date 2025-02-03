@@ -40,7 +40,7 @@ public abstract class Road extends SimulatedObject {
 		this.length = length;
 		this.weatherConditions = weather;
 		this.totalContamination = 0;
-		this.vehicles = new ArrayList<>();
+		this.vehicles = new ArrayList<Vehicle>();
 
 		srcJunc.addOutgoingRoad(this,destJunc);
 		destJunc.addIncomingRoad(this);
@@ -48,10 +48,28 @@ public abstract class Road extends SimulatedObject {
 	public int getLength() {
 		return length;
 	}
-	
+	void enter(Vehicle v) {
+		if (v == null) {
+			throw new IllegalArgumentException("El vehículo no debe ser nulo");
+		}
+		if(!(v.getSpeed()==0 || v.getLocation()==0)){
+			throw new IllegalArgumentException("El vehículo no está en la posición inicial o velocidad 0");
+		}
+		vehicles.add(v);
+	}
+	void exit(Vehicle v) {
+		if (v == null) {
+			throw new IllegalArgumentException("El vehículo no debe ser nulo");
+		}
+		if(!vehicles.contains(v)){
+			throw new IllegalArgumentException("El vehículo no está en la carretera");
+		}
+		vehicles.remove(v);
+	}
 	@Override
 	void advance(int time) {
 		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -76,6 +94,6 @@ public abstract class Road extends SimulatedObject {
 	abstract void reduceTotalContamination();
 	abstract void updateSpeedLimit();
 	abstract int calculateVehicleSpeed(Vehicle v);
-	
+
 
 }
